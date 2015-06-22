@@ -11,7 +11,9 @@ myapp.controller('bindControl', function ($http, $timeout) {
     'use strict';
     var bindCtrl = this,
         onSuccess = function(position) {
-        alert('Latitude: '          + position.coords.latitude          + '\n' +
+            var logSpan = document.getElementById('logSpan');
+            logSpan.innerText = logSpan.innerText + 'onSuccess\n';
+            alert('Latitude: '          + position.coords.latitude          + '\n' +
               'Longitude: '         + position.coords.longitude         + '\n' +
               'Altitude: '          + position.coords.altitude          + '\n' +
               'Accuracy: '          + position.coords.accuracy          + '\n' +
@@ -22,6 +24,8 @@ myapp.controller('bindControl', function ($http, $timeout) {
     };
 
     function onError(error) {
+        var logSpan = document.getElementById('logSpan');
+        logSpan.innerText = logSpan.innerText + 'onError\n';
         alert('code: '    + error.code    + '\n' +
               'message: ' + error.message + '\n');
     }
@@ -38,14 +42,16 @@ myapp.controller('bindControl', function ($http, $timeout) {
 
     
     document.addEventListener("deviceready", function () {
-//        navigator.geolocation.getCurrentPosition(onSuccess, onError, {
-//            timeout: 5000,
-//            enableHighAccuracy: false
-//        });
-        navigator.contacts.find(['id', 'displayName'], function (contacts) {
-            alert('Found ' + contacts.length + ' contacts.\nThe first one: '+ JSON.stringify(contacts[0]));
-        }, function (err) {
-            alert(err);
+        var logSpan = document.getElementById('logSpan');
+        logSpan.innerText = logSpan.innerText + 'deviceready handler\n';
+        navigator.geolocation.getCurrentPosition(onSuccess, onError, {
+            timeout: 60000,
+            enableHighAccuracy: false
         });
+//        navigator.contacts.find(['id', 'displayName'], function (contacts) {
+//            alert('Found ' + contacts.length + ' contacts.\nThe first one: '+ JSON.stringify(contacts[0]));
+//        }, function (err) {
+//            alert(err);
+//        });
     }, false);
 });
